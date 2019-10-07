@@ -7,47 +7,55 @@ using BattleShipsV2.Helpers;
 
 namespace BattleShipsV2.Board
 {
-   
-
     public class RealBoard : GameBoard
     {
-
         public List<Coordinates> GetOpenRandomCells()
         {
-            return Cells.Where(x => x.OccupationType == OccupationType.Empty && x.IsRandomAvailable).Select(x => x.Coordinates).ToList();
+            return Cells
+            .Where(x => x.OccupationType == OccupationType.Empty && x.IsRandomAvailable)
+            .Select(x => x.Coordinates)
+            .ToList();
         }
 
         public List<Coordinates> GetHitNeighbors()
         {
             List<Cell> panels = new List<Cell>();
             var hits = Cells.Where(x => x.OccupationType == OccupationType.Hit);
+            
             foreach (var hit in hits)
             {
                 panels.AddRange(GetNeighbors(hit.Coordinates).ToList());
             }
-            return panels.Distinct().Where(x => x.OccupationType == OccupationType.Empty).Select(x => x.Coordinates).ToList();
+
+            return panels
+            .Distinct()
+            .Where(x => x.OccupationType == OccupationType.Empty)
+            .Select(x => x.Coordinates)
+            .ToList();
         }
 
         public List<Cell> GetNeighbors(Coordinates coordinates)
         {
-            int row = coordinates.Row;
-            int column = coordinates.Column;
+            byte one = 1;
+            byte ten = 10;
+            byte row = coordinates.Row;
+            byte column = coordinates.Column;
             List<Cell> cells = new List<Cell>();
-            if (column > 1)
+            if (column > one)
             {
-                cells.Add(Cells.At(row, column - 1));
+                cells.Add(Cells.At(row, column--));
             }
-            if (row > 1)
+            if (row > one)
             {
-                cells.Add(Cells.At(row - 1, column));
+                cells.Add(Cells.At(row--, column));
             }
-            if (row < 10)
+            if (row < ten)
             {
-                cells.Add(Cells.At(row + 1, column));
+                cells.Add(Cells.At(row++, column));
             }
-            if (column < 10)
+            if (column < ten)
             {
-                cells.Add(Cells.At(row, column + 1));
+                cells.Add(Cells.At(row, column++));
             }
             return cells;
         }

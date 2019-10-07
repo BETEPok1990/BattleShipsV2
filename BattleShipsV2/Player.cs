@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using BattleShipsV2.Board;
 using BattleShipsV2.Helpers;
 using BattleShipsV2.Ships;
+using System.Text.RegularExpressions;
 
 namespace BattleShipsV2
 {
     public class Player
     {
-        public string Name { get; set; }
-        public GameBoard GameBoard { get; set; }
-        public RealBoard RealBoard { get; set; }
-        public List<Ship> Ships { get; set; }
+        public string Name { get; }
+        private GameBoard GameBoard;
+        private RealBoard RealBoard;
+        private List<Ship> Ships;
         public bool HasLost
         {
             get
@@ -46,7 +47,7 @@ namespace BattleShipsV2
 
             //Console.WriteLine("Own Board:                          Real Board:");
             Console.WriteLine("Real Board:");
-            for (int row = 1; row <= 10; row++)
+            for (byte row = 1; row <= 10; row++)
             {
                 //uncomment for multiplayer game -------------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ namespace BattleShipsV2
                 //Console.Write("                ");
 
 
-                for (int realColumn = 1; realColumn <= 10; realColumn++)
+                for (byte realColumn = 1; realColumn <= 10; realColumn++)
                 {
                     Console.Write(RealBoard.Cells.At(row, realColumn).Status + " ");
                 }
@@ -76,21 +77,22 @@ namespace BattleShipsV2
                 bool ifOccupied = true;
                 while (ifOccupied)
                 {
-                    var startcolumn = rand.Next(1, 11);
-                    var startrow = rand.Next(1, 11);
-                    int endrow = startrow, endcolumn = startcolumn;
-                    var orientation = rand.Next(1, 101) % 2;
+                    byte startcolumn = (byte)rand.Next(1, 11);
+                    byte startrow = (byte)rand.Next(1, 11);
+                    byte endrow = startrow;
+                    byte endcolumn = startcolumn;
+                    byte orientation = (byte)(rand.Next(1, 101) % 2);
 
                     if (orientation == 0)
                     {
-                        for (int i = 1; i < ship.Width; i++)
+                        for (byte i = 1; i < ship.Width; i++)
                         {
                             endrow++;
                         }
                     }
                     else
                     {
-                        for (int i = 1; i < ship.Width; i++)
+                        for (byte i = 1; i < ship.Width; i++)
                         {
                             endcolumn++;
                         }
@@ -120,24 +122,36 @@ namespace BattleShipsV2
 
         public Coordinates FireShot()
         {
-            Console.WriteLine($"{Name} please enter coordinates!");
-            var inputValue = Console.ReadLine();
+            string inputValue = null; 
+            var pattern = new Regex(@"^[A-J][1-9]0?$");
             
-            Dictionary<string, int> dict = new Dictionary<string, int>()
+            do
             {
-                {"A", 1}, {"B", 2}, {"C", 3}, {"D", 4}, {"E", 5}, {"F", 6}, {"G", 7}, {"H", 8}, {"I", 9}, {"J", 10}
+                Console.WriteLine($@"{Name} please enter coordinates in right format (letter from A to J and number from 1 to 10. exp: B10)!");
+                inputValue = Console.ReadLine();
+            } while (!pattern.IsMatch(inputValue));
+
+            Dictionary<char, byte> dict = new Dictionary<char, byte>()
+            {
+                {'A', 1},
+                {'B', 2},
+                {'C', 3},
+                {'D', 4},
+                {'E', 5},
+                {'F', 6},
+                {'G', 7},
+                {'H', 8},
+                {'I', 9},
+                {'J', 10}
             };
             Coordinates coords = new Coordinates(
-                Convert.ToInt32(inputValue.ToCharArray()[1]) - 48,
-                dict.FirstOrDefault(x => x.Key == inputValue.ToCharArray()[0].ToString()).Value
+                (byte)(inputValue[1]-48),
+                dict[inputValue[0]]
             );
 
             Console.WriteLine($"{Name} Firing shot at {coords.Column} , {coords.Row} !");
             return coords;
         }
-
-
-       
 
         public ShotResult ProcessShot(Coordinates coords)
         {

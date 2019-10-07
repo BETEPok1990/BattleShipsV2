@@ -11,7 +11,7 @@ namespace BattleShipsV2.Board
         public OccupationType OccupationType { get; set; }
         public Coordinates Coordinates { get; set; }
 
-        public Cell(int row, int column)
+        public Cell(byte row, byte column)
         {
             Coordinates = new Coordinates(row, column);
             OccupationType = OccupationType.Empty;

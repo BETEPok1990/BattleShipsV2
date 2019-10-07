@@ -7,16 +7,14 @@ using BattleShipsV2.Board;
 
 namespace BattleShipsV2.Helpers
 {
-    
-
     public static class CellHelper
     {
-        public static Cell At(this List<Cell> cells, int row, int column)
+        public static Cell At(this List<Cell> cells, byte row, byte column)
         {
             return cells.First(x => x.Coordinates.Row == row && x.Coordinates.Column == column);
         }
 
-        public static List<Cell> Range(this List<Cell> cells, int startRow, int startColumn, int endRow, int endColumn)
+        public static List<Cell> Range(this List<Cell> cells, byte startRow, byte startColumn, byte endRow, byte endColumn)
         {
             return cells.Where(x => x.Coordinates.Row >= startRow
                                      && x.Coordinates.Column >= startColumn

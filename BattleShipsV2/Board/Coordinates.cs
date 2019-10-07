@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace BattleShipsV2.Board
 {
-    public class Coordinates
+    public struct Coordinates
     {
-        public int Row { get; set; }
-        public int Column { get; set; }
+        public byte Row { get; }
+        public byte Column { get; }
 
-        public Coordinates(int row, int column)
+        public Coordinates(byte row, byte column)
         {
             Row = row;
             Column = column;
         }
-
-        
     }
 }

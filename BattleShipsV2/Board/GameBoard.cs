@@ -16,9 +16,9 @@ namespace BattleShipsV2.Board
         public GameBoard()
         {
             Cells = new List<Cell>();
-            for (int i = 1; i <= 10; i++)
+            for (byte i = 1; i <= 10; i++)
             {
-                for (int k = 1; k <= 10; k++)
+                for (byte k = 1; k <= 10; k++)
                 {
                     Cells.Add(new Cell(i, k));
                 }

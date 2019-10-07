@@ -30,6 +30,7 @@ namespace BattleShipsV2
         public void PlayRound()
         {
             
+  
             var coordinates = Player.FireShot();
             var result = AiPlayer.ProcessShot(coordinates);
             Player.ProcessShotResult(coordinates, result);
